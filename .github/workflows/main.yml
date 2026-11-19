@@ -1,0 +1,25 @@
+name: Unzip ARVEN Store
+on:
+  push:
+    paths:
+      - '.github/workflows/**'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Extract ARVEN files
+        shell: bash
+        run: |
+          unzip -o arven-store-v2.zip
+          shopt -s dotglob
+          cp -rf arven-store/* .
+          rm -rf arven-store arven-store-v2.zip
+          git config user.name "ARVEN Setup"
+          git config user.email "arven.business17@gmail.com"
+          git add -A
+          git commit -m "Extract ARVEN Store project files"
+          git push
